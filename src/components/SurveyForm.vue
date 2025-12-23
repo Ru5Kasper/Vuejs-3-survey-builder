@@ -1,5 +1,6 @@
+<!-- SurveyForm.vue -->
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import ProgressBar from './card/ProgressBar.vue'
 import QuestionCard from './card/QuestionCard.vue'
 import NavigationButtons from './card/NavigationButtons.vue'
@@ -13,14 +14,19 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  currentStep: {
+    type: Number,
+    default: 0,
+  },
 })
 
-const emit = defineEmits(['answer'])
+const emit = defineEmits(['answer', 'update:currentStep'])
 
-const currentStep = ref(0)
-const currentQuestion = computed(() => props.questions[currentStep.value])
+const internalCurrentStep = ref(props.currentStep)
+
+const currentQuestion = computed(() => props.questions[internalCurrentStep.value])
 const currentAnswer = computed(() => props.answers[currentQuestion.value?.id])
-const isLastStep = computed(() => currentStep.value === props.questions.length - 1)
+const isLastStep = computed(() => internalCurrentStep.value === props.questions.length - 1)
 
 const canGoNext = computed(() => {
   const question = currentQuestion.value
@@ -40,17 +46,31 @@ function onAnswer({ id, value }) {
 
 function onGoNext() {
   if (!canGoNext.value) return
-  if (!isLastStep.value) currentStep.value++
+  if (!isLastStep.value) {
+    internalCurrentStep.value++
+    emit('update:currentStep', internalCurrentStep.value)
+  }
 }
 
 function onGoBack() {
-  if (currentStep.value > 0) currentStep.value--
+  if (internalCurrentStep.value > 0) {
+    internalCurrentStep.value--
+    emit('update:currentStep', internalCurrentStep.value)
+  }
 }
+
+// Синхронизация внешнего и внутреннего состояния
+watch(
+  () => props.currentStep,
+  (newStep) => {
+    internalCurrentStep.value = newStep
+  },
+)
 </script>
 
 <template>
   <div>
-    <ProgressBar :current-step="currentStep" :total-steps="questions.length" />
+    <ProgressBar :current-step="internalCurrentStep" :total-steps="questions.length" />
 
     <QuestionCard
       v-if="currentQuestion"
@@ -60,7 +80,7 @@ function onGoBack() {
     />
 
     <NavigationButtons
-      :can-go-back="currentStep > 0"
+      :can-go-back="internalCurrentStep > 0"
       :can-go-next="canGoNext"
       :is-last-step="isLastStep"
       @go-next="onGoNext"

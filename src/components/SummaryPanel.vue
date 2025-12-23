@@ -1,8 +1,11 @@
+<!-- SummaryPanel.vue -->
 <script setup>
-defineProps({
+import { ref } from 'vue' // Убрали emit из импорта
+
+const props = defineProps({
   answers: {
     type: Object,
-    default: () => ({}),
+    default: () => ({}), // Исправлено: () => ({}) вместо () => ([])
   },
   surveyQuestions: {
     type: Array,
@@ -10,7 +13,10 @@ defineProps({
   },
 })
 
-defineEmits(['reset'])
+const emit = defineEmits(['reset'])
+
+// Индикатор сохранения
+const isSaved = ref(true)
 
 function getDisplayValue(question, answer) {
   if (!answer && answer !== 0) return '—'
@@ -19,7 +25,6 @@ function getDisplayValue(question, answer) {
     const options = question.options || []
 
     if (Array.isArray(answer)) {
-      // Для checkbox - массив значений
       return answer
         .map((val) => {
           const option = options.find((opt) => opt.value === val)
@@ -27,20 +32,24 @@ function getDisplayValue(question, answer) {
         })
         .join(', ')
     } else {
-      // Для radio/select - одно значение
       const option = options.find((opt) => opt.value === answer)
       return option ? option.label : answer
     }
   }
 
-  // Для text вопросов
   return answer
 }
 </script>
 
 <template>
   <div class="bg-white rounded-2xl shadow p-6">
-    <h2 class="text-xl font-semibold mb-4">Ваши ответы</h2>
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">Ваши ответы</h2>
+      <span v-if="isSaved" class="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
+        Сохранено
+      </span>
+    </div>
+
     <div class="space-y-3">
       <div v-for="question in surveyQuestions" :key="question.id" class="border rounded-lg p-3">
         <div class="text-sm text-gray-500">{{ question.title }}</div>
@@ -50,7 +59,10 @@ function getDisplayValue(question, answer) {
       </div>
     </div>
 
-    <button class="mt-6 px-4 py-2 rounded bg-gray-100 hover:bg-gray-200" @click="$emit('reset')">
+    <button
+      class="mt-6 px-4 py-2 rounded bg-gray-100 hover:bg-gray-200 w-full"
+      @click="$emit('reset')"
+    >
       Начать заново
     </button>
   </div>

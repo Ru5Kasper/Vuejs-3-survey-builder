@@ -6,9 +6,9 @@ export const surveyQuestions = [
     title: 'Как часто вы путешествуете?',
     description: 'Выберите наиболее подходящий вариант',
     options: [
-      { value: 'rarely', label: 'Раз в год или реже' },
-      { value: 'sometimes', label: '2-4 раза в год' },
-      { value: 'often', label: '5+ раз в год' },
+      { value: '1', label: 'Раз в год или реже' },
+      { value: '2', label: '2-4 раза в год' },
+      { value: '3', label: '5+ раз в год' },
     ],
   },
   {
@@ -16,11 +16,11 @@ export const surveyQuestions = [
     type: 'checkbox',
     title: 'Какие виды путешествий вам интересны?',
     options: [
-      { value: 'beach', label: 'Пляжный отдых' },
-      { value: 'mountains', label: 'Горы и природа' },
-      { value: 'cities', label: 'Города и культура' },
-      { value: 'adventure', label: 'Экстрим и приключения' },
-      { value: 'wellness', label: 'Spa и релакс' },
+      { value: '1', label: 'Пляжный отдых' },
+      { value: '2', label: 'Горы и природа' },
+      { value: '3', label: 'Города и культура' },
+      { value: '4', label: 'Экстрим и приключения' },
+      { value: '5', label: 'Spa и релакс' },
     ],
   },
   {
@@ -28,11 +28,11 @@ export const surveyQuestions = [
     type: 'select',
     title: 'Какой бюджет вы обычно планируете на поездку?',
     options: [
-      { value: 1, label: 'До $500' },
-      { value: 2, label: '$500-$1000' },
-      { value: 3, label: '$1000-$2000' },
-      { value: 4, label: '$2000-$5000' },
-      { value: 5, label: '$5000+' },
+      { value: '1', label: 'До $500' },
+      { value: '2', label: '$500-$1000' },
+      { value: '3', label: '$1000-$2000' },
+      { value: '4', label: '$2000-$5000' },
+      { value: '5', label: '$5000+' },
     ],
   },
   {
