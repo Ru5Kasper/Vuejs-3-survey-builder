@@ -1,3 +1,5 @@
+Башмаков Артем, КИ23-10Б
+
 # .
 
 This template should help get you started developing with Vue 3 in Vite.
