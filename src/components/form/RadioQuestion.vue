@@ -9,6 +9,7 @@ defineProps({
     default: 'radio-group',
   },
 })
+
 const modelValue = defineModel({ type: [String, Number] })
 </script>
 

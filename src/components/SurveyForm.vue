@@ -15,11 +15,11 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits({ answer: null })
+const emit = defineEmits(['answer'])
 
 const currentStep = ref(0)
 const currentQuestion = computed(() => props.questions[currentStep.value])
-const currentAnswerQuestion = computed(() => props.answers[currentQuestion.value.id])
+const currentAnswer = computed(() => props.answers[currentQuestion.value?.id])
 const isLastStep = computed(() => currentStep.value === props.questions.length - 1)
 
 const canGoNext = computed(() => {
@@ -31,33 +31,40 @@ const canGoNext = computed(() => {
   if (question.type === 'checkbox') {
     return Array.isArray(answer) && answer.length > 0
   }
-
-  return !!answer
+  return answer !== undefined && answer !== null && answer !== ''
 })
 
-function onAnswer() {}
+function onAnswer({ id, value }) {
+  emit('answer', { id, value })
+}
 
 function onGoNext() {
   if (!canGoNext.value) return
   if (!isLastStep.value) currentStep.value++
 }
+
 function onGoBack() {
   if (currentStep.value > 0) currentStep.value--
 }
 </script>
 
 <template>
-  <ProgressBar :current-step="currentStep" :total-steps="questions.length" />
+  <div>
+    <ProgressBar :current-step="currentStep" :total-steps="questions.length" />
 
-  <QuestionCard
-    v-if="currentQuestion"
-    :question="currentQuestion"
-    :answer-question="currentAnswerQuestion"
-  />
+    <QuestionCard
+      v-if="currentQuestion"
+      :question="currentQuestion"
+      :answer-question="currentAnswer"
+      @answer="onAnswer"
+    />
 
-  <NavigationButtons
-    :can-go-back="currentStep > 0"
-    :can-go-next="canGoNext"
-    :is-last-step="isLastStep"
-  />
+    <NavigationButtons
+      :can-go-back="currentStep > 0"
+      :can-go-next="canGoNext"
+      :is-last-step="isLastStep"
+      @go-next="onGoNext"
+      @go-back="onGoBack"
+    />
+  </div>
 </template>

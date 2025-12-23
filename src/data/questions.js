@@ -1,3 +1,4 @@
+// questions.js
 export const surveyQuestions = [
   {
     id: 'travel_frequency',
@@ -10,7 +11,6 @@ export const surveyQuestions = [
       { value: 'often', label: '5+ раз в год' },
     ],
   },
-
   {
     id: 'travel_type',
     type: 'checkbox',
@@ -23,18 +23,18 @@ export const surveyQuestions = [
       { value: 'wellness', label: 'Spa и релакс' },
     ],
   },
-
   {
     id: 'budget',
     type: 'select',
     title: 'Какой бюджет вы обычно планируете на поездку?',
     options: [
       { value: 1, label: 'До $500' },
-      { value: 5, label: '$1000–2000' },
-      { value: 10, label: '$5000+' },
+      { value: 2, label: '$500-$1000' },
+      { value: 3, label: '$1000-$2000' },
+      { value: 4, label: '$2000-$5000' },
+      { value: 5, label: '$5000+' },
     ],
   },
-
   {
     id: 'dream_destination',
     type: 'text',
